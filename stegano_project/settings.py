@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'stegano_app',
+    'stagano_app',
 ]
 
 MIDDLEWARE = [
