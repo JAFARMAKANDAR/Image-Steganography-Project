@@ -1,3 +1,5 @@
+import io
+
 from django.shortcuts import render
 from PIL import Image  #pip install Pillow
 import stepic    #pip install stepic
@@ -15,6 +17,14 @@ def encryption_view(request):
         text = request.POST['text']
         image_file = request.FILES['image']
         image = Image.open(image_file)
+
+        if image.format != 'PNG':
+            image = image.convert('RGB')
+            buffer = io.BytesIO()
+            image.save(buffer, format="PNG")
+            image = Image.open(buffer)
+
+
         new_image = hide_text_in_image(image,text)
         image_path = 'encrypted_images/' + 'new_'+image_file.name
         new_image.save(image_path)
@@ -27,6 +37,11 @@ def decryption_view(request):
         image_file = request.FILES['image']
         image = Image.open(image_file)
 
+        if image.format != 'PNG':
+            image = image.convert('RGBA')
+            buffer = io.BytesIO()
+            image.save(buffer, format="PNG")
+            image = Image.open(buffer)
         text = extract_text_from_image(image)
     return render(request, 'decryption.html')
 def extract_text_from_image(image):
